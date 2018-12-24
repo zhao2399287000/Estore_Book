@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhong.dao.ProductsMapper">
+	<insert id="saveProduct" parameterType="com.zhong.model.Products">
+		insert into products values(#{id},#{name},#{price},#{category},#{pnum},#{imgurl},#{description},#{state},#{publish})
+	</insert>
+	<update id="updateProduct" parameterType="com.zhong.model.Products">
+		update products set name=#{name},price=#{price},category=#{category},pnum=#{pnum}
+		<if test="imgurl != null and imgurl !=''">
+			,imgurl=#{imgurl}
+		</if>
+		,description=#{description},state=#{state},publish=#{publish}
+		where id=#{id}
+	</update>
+	<delete id="delProduct" parameterType="string">
+		delete from products where id = #{id}
+	</delete>
+	<select id="findProductById" parameterType="string" resultType="com.zhong.model.Products">
+		select * from products where id = #{id}	
+	</select>
+	<select id="findProductsList" resultType="com.zhong.model.Products">
+		select * from products
+	</select>
+	<!-- 根据类别查询商品 -->
+	<select id="findProductsListByType"  resultType="com.zhong.model.Products">
+		select * from products where category = #{param1} limit #{param2.pageNum},#{param2.pageSize}
+	</select>
+	<!-- 获取记录数 -->
+	<select id="findPageCount"  resultType="int">
+		select count(*) from products
+	</select>
+	<!-- 获取分页记录数 -->
+	<select id="findProductsPage"  parameterType="com.zhong.model.PageBean" resultType="com.zhong.model.Products">
+		select * from products limit #{pageNum},#{pageSize}
+	</select>
+	<!-- 获取分页记录数 -->
+	<select id="findCountByType"  parameterType="string" resultType="int">
+		select count(*) from products where category = #{type}
+	</select>
+</mapper>
